@@ -7,7 +7,7 @@ const {
 
 const getMovies = (url, res) => {
   var movies = []
-  var magnet
+
   request(url, (error, response, html) => {
     if (!error && response.statusCode === 200) {
       const $ = cheerio.load(html);
@@ -19,27 +19,29 @@ const getMovies = (url, res) => {
         var seeds = $(element).find('.seeds:nth-child(1)').text()
         var leeches = $(element).find('.leeches').text()
         var size = $(element).find('.size').text()
-
-        var magnet =getMagnet(href)
-
-
-
-
         var movie = {
           name,
-          magnet,
           seeds,
           leeches,
           size
         }
-        movies.push(movie)
-      })
-      res.send({
-        movies
-      })
-    }
+// temporary solution
+     getMagnet(href,movie,res)
+     .then((movie)=>{
+      movies.push(movie)
+      setTimeout(()=>{
+        res.send({movies})
+      },2000)
+     })
+     .catch((e)=>res.status(401).send())
 
+     
+      })
+      console.log(movies)
+    }
+    
   })
+  
 }
 
 module.exports = {

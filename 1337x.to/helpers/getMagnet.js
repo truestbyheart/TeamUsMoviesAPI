@@ -1,29 +1,36 @@
 const cheerio = require('cheerio')
 const request = require('request')
 
-var magnet
-
-const getMagnet = (href) => {
+ function getMagnet (href,movie,res) {
+  
   var url = 'https://1337x.to' + href
 
-  request(url, (error, response, html) => {
-    if (!error && response.statusCode === 200) {
-      const $ = cheerio.load(html)
-      magnet = $('.download-links-dontblock li').find('a').attr('href')
-      hash = $('.infohash-box').find('p').text()
+  return new Promise((resolve,reject)=>{
+    request(url, (error, response, html) => {
+      if (!error && response.statusCode === 200) {
+        const $ = cheerio.load(html)
+        magnet = $('.download-links-dontblock li').find('a').attr('href')
+        hash = $('.infohash-box').find('span').text()
+  
+        var data = {
+          magnet,
+          hash
+        }
+  
+        movie.magnet=data
 
-      var data = {
-        magnet,
-        hash
+        resolve(movie)
+        
+  
       }
-      console.log(data)
-      return data
-    }
-
+    })
   })
 
-
+  
 }
+
+
+
 
 
 module.exports = {
