@@ -7,6 +7,7 @@ const asian = require('./koreantvseries')
 const {
   getMovies
 } = require('./1337x.to/movies')
+const {sortRequest} =require('./filters/1337x.to')
 
 
 const app = express()
@@ -15,8 +16,6 @@ const port = process.env.port || 3000
 const router = express.Router()
 
 app.listen(port)
-
-console.log('server running on port:', port)
 
 
 // this is the app itself for now
@@ -48,7 +47,7 @@ router.get('/koreandrama/:dramaName', (req, res) => {
         var content = $('.title').find('a').attr('href')
         console.log(content)
         asian.getEpisodes(content, res)
-        // today.ep(content, res)
+
 
       } else {
         console.log('failed')
@@ -57,13 +56,34 @@ router.get('/koreandrama/:dramaName', (req, res) => {
     })
 })
 
-router.get('/1337x.to/movies/:title', (req, res) => {
+router.get('/1337x.to/movies/name=:title', (req, res) => {
   var title = req.params.title
+  var page = req.query.page
+  var sort = req.query.sort
+
+  if (!page && !sort) {
+    var url = 'https://1337x.to/category-search/' + title + '/Movies/1/'
+    getMovies(url, res)
+  } else if (page && !sort) {
+    var url = 'https://1337x.to/category-search/' + title + '/Movies/' + page + '/'
+    getMovies(url, res)
+  } else if (!page && sort) {
+    var data = {title,sort,page:1}
+    sortRequest(data,res)
+  }else if(page && sort){
+
+  }
+
+
+
+
+
+
   //https://1337x.to/category-search/the%20meg/Movies/1/
 
-  var url = 'https://1337x.to/category-search/' + title + '/Movies/1/'
-  getMovies(url, res)
+
 })
 
 
 app.use('/', router)
+

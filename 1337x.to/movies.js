@@ -6,7 +6,9 @@ const {
 } = require('./helpers/getMagnet')
 
 const getMovies = (url, res) => {
-  var movies = []
+
+  console.log(url)
+ var movies = []
 
   request(url, (error, response, html) => {
     if (!error && response.statusCode === 200) {
@@ -31,13 +33,13 @@ const getMovies = (url, res) => {
       movies.push(movie)
       setTimeout(()=>{
         res.send({movies})
-      },2000)
+      },1000)
      })
      .catch((e)=>res.status(401).send())
 
      
       })
-      console.log(movies)
+      
     }
     
   })
