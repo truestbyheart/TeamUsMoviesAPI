@@ -1,7 +1,7 @@
 const cheerio = require('cheerio')
 const request = require('request')
 
- function getMagnet (movie,res) {
+ function getMagnet (movie) {
 
   var g =[]
   return new Promise((resolve,reject)=>{ 
@@ -26,7 +26,6 @@ const request = require('request')
             magnet,
             hash
           }
-       // console.log(data)
         g.push(data)
         resolve(g)
         }
@@ -34,7 +33,6 @@ const request = require('request')
       
     }
   
-    //resolve(g)
    
   
    
@@ -53,23 +51,3 @@ const request = require('request')
 module.exports = {
   getMagnet
 }
-
-// var url = 'https://1337x.to' + href
-//   request(url, (error, response, html) => {
-//     if (!error && response.statusCode === 200) {
-//       const $ = cheerio.load(html)
-//       magnet = $('.download-links-dontblock li').find('a').attr('href')
-//       hash = $('.infohash-box').find('span').text()
-
-//       var data = {
-//         magnet,
-//         hash
-//       }
-
-//       movie.magnet=data
-      
-//       return JSON.stringify(movie)
-      
-
-//     }
-//   })

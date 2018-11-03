@@ -18,7 +18,7 @@ const getMovies = (url, res) => {
         var href = $(element).find('.name a:nth-child(2)').attr('href')
         var seeds = $(element).find('.seeds:nth-child(1)').text()
         var leeches = $(element).find('.leeches').text()
-        var size = $(element).find('.size').text()
+        var size = $(element).find(".size").text()
         var movie = {
           name,
           seeds,
@@ -30,7 +30,7 @@ const getMovies = (url, res) => {
 
       })
 
-  getMagnet(movies,res).then((movie)=>{
+  getMagnet(movies).then((movie)=>{
    
    setTimeout(()=>{res.send(movie)},1350)
   }).catch((e)=> res.status(400).send())
