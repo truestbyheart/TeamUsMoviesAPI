@@ -7,20 +7,25 @@ const asian = require('./koreantvseries')
 const {
   getMovies
 } = require('./1337x.to/movies')
-const {sortRequest} =require('./filters/1337x.to')
+const {
+  sortRequest
+} = require('./filters/1337x.to')
+const {
+  getMagnet
+} = require('./1337x.to/helpers/getMagnet')
 
 
 const app = express()
-const port = process.env.port || 3000
+const port = process.env.PORT || 3000
 
-const router = express.Router()
+
 
 app.listen(port)
 
 
 // this is the app itself for now
 
-router.get('/todaytvseries/:seriesName', (req, res) => {
+app.get('/todaytvseries/:seriesName', (req, res) => {
   var seriesName = req.params.seriesName
 
   request('http://www.todaytvseries2.com/search-series?searchword=' + seriesName + '&searchphrase=all',
@@ -35,7 +40,7 @@ router.get('/todaytvseries/:seriesName', (req, res) => {
 
 })
 
-router.get('/koreandrama/:dramaName', (req, res) => {
+app.get('/koreandrama/:dramaName', (req, res) => {
   var dramaName = req.params.dramaName
 
   var url = 'https://dramamate.net/?s=' + dramaName
@@ -56,10 +61,11 @@ router.get('/koreandrama/:dramaName', (req, res) => {
     })
 })
 
-router.get('/1337x.to/movies/name=:title', (req, res) => {
+app.get('/1337x.to/movies/name=:title', (req, res) => {
   var title = req.params.title
   var page = req.query.page
   var sort = req.query.sort
+  var url = 'https://1337x.to/category-search/' + title + '/Movies/1/'
 
   if (!page && !sort) {
     var url = 'https://1337x.to/category-search/' + title + '/Movies/1/'
@@ -68,10 +74,19 @@ router.get('/1337x.to/movies/name=:title', (req, res) => {
     var url = 'https://1337x.to/category-search/' + title + '/Movies/' + page + '/'
     getMovies(url, res)
   } else if (!page && sort) {
-    var data = {title,sort,page:1}
-    sortRequest(data,res)
-  }else if(page && sort){
-
+    var data = {
+      title,
+      sort,
+      page: 1
+    }
+    sortRequest(data, res)
+  } else if (page && sort) {
+    var data = {
+      title,
+      sort,
+      page
+    }
+    sortRequest(data, res)
   }
 
 
@@ -79,11 +94,5 @@ router.get('/1337x.to/movies/name=:title', (req, res) => {
 
 
 
-  //https://1337x.to/category-search/the%20meg/Movies/1/
-
 
 })
-
-
-app.use('/', router)
-

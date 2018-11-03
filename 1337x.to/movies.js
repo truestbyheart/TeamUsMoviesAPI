@@ -6,9 +6,7 @@ const {
 } = require('./helpers/getMagnet')
 
 const getMovies = (url, res) => {
-
-  console.log(url)
- var movies = []
+  var movies = []
 
   request(url, (error, response, html) => {
     if (!error && response.statusCode === 200) {
@@ -24,27 +22,25 @@ const getMovies = (url, res) => {
         var movie = {
           name,
           seeds,
+          href,
           leeches,
           size
         }
-// temporary solution
-     getMagnet(href,movie,res)
-     .then((movie)=>{
       movies.push(movie)
-      setTimeout(()=>{
-        res.send({movies})
-      },1000)
-     })
-     .catch((e)=>res.status(401).send())
 
-     
       })
-      
-    }
-    
-  })
-  
+
+  getMagnet(movies,res).then((movie)=>{
+   
+   setTimeout(()=>{res.send(movie)},1350)
+  }).catch((e)=> res.status(400).send())
 }
+
+
+
+  })
+}
+
 
 module.exports = {
   getMovies
